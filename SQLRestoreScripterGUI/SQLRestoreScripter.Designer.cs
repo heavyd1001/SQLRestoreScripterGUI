@@ -194,6 +194,7 @@
 			this.btnGenerate.TabIndex = 9;
 			this.btnGenerate.Text = "Generate Script";
 			this.btnGenerate.UseVisualStyleBackColor = true;
+			this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
 			// 
 			// btnLog
 			// 

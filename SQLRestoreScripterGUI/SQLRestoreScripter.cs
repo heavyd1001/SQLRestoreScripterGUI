@@ -197,7 +197,6 @@ namespace SQLRestoreScripterGUI
 			treeNode.Nodes[treeNode.Nodes.Count - 1].Nodes[treeNode.Nodes[treeNode.Nodes.Count - 1].Nodes.Count - 1].Checked = isChecked;
 		}
 
-
 		public void PopulateTreeview(MaintenancePlan maintPlan)
 		{
 			int db = 0;
@@ -223,6 +222,29 @@ namespace SQLRestoreScripterGUI
 					dateindex = 0;
 					db++;
 				}
+		}
+
+		private void btnGenerate_Click(object sender, EventArgs e)
+		{
+			foreach (TreeNode node in treeView1.Nodes)
+			{
+				if (node.Checked == true)
+				{
+					foreach (TreeNode subNode in node.Nodes)
+					{
+						if (subNode.Checked == true)
+						{
+							foreach (TreeNode subSubNode in subNode.Nodes)
+							{
+								if (subSubNode.Checked == true)
+								{
+									MessageBox.Show(subSubNode.ToString());
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 
