@@ -226,24 +226,31 @@ namespace SQLRestoreScripterGUI
 
 		private void btnGenerate_Click(object sender, EventArgs e)
 		{
+			List<DateTime> files = new List<DateTime>();
 			foreach (TreeNode node in treeView1.Nodes)
 			{
-				if (node.Checked == true)
+				if (node.Checked == false)
+					continue;
+
+				foreach (TreeNode subNode in node.Nodes)
 				{
-					foreach (TreeNode subNode in node.Nodes)
+					if (subNode.Checked == false)
+						continue;
+
+					files.Add(DateTime.ParseExact(subNode.Text, "d", null));
+
+					foreach (TreeNode subSubNode in subNode.Nodes)
 					{
-						if (subNode.Checked == true)
-						{
-							foreach (TreeNode subSubNode in subNode.Nodes)
-							{
-								if (subSubNode.Checked == true)
-								{
-									MessageBox.Show(subSubNode.ToString());
-								}
-							}
-						}
+						if (subSubNode.Checked == true)
+							continue;
+						MessageBox.Show(subSubNode.ToString());
 					}
 				}
+				
+			}
+			foreach (DateTime file in files)
+			{
+				MessageBox.Show(file.ToString());
 			}
 		}
 

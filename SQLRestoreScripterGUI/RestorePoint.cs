@@ -23,6 +23,7 @@ namespace SQLRestoreScripter
 		public string Database { get; set; }
 		public DateTime Date { get; set; }
 		public DateTime Time { get; set; }
+		public bool IsRestorePoint { get; set; }
 
     }
 }
