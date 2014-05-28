@@ -20,6 +20,7 @@ namespace SQLRestoreScripter
             Time = time;
         }
 
+		public List<BackupFile> BackupSet { get; set; }
 		public string Database { get; set; }
 		public DateTime Date { get; set; }
 		public DateTime Time { get; set; }
