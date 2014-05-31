@@ -70,13 +70,20 @@ namespace SQLRestoreScripter
 			get { return _logBKFolder; }
 		}
 
-        public List<string> DBs()
+		
+		/// <summary>
+		/// Returns Distict databases listed in Full backup directory
+		/// </summary>
+		public List<string> DBs()
         {
             List<string> DBs;
             DBs =  _fullBKFolder.Files.Select(x => x.DatabaseName).Distinct().ToList();
             return DBs;
         }
 
+		/// <summary>
+		/// Returns dates for full backups
+		/// </summary>
         public List<DateTime> GetDates()
         {
             List<DateTime> dates;
@@ -89,6 +96,10 @@ namespace SQLRestoreScripter
 			dates = FullBKFolder.Files.Where(x => x.DatabaseName == dB).Select(x => x.LastModified.Date).Distinct().ToList();
 			return dates;
 		}
+
+		/// <summary>
+		/// Returns log times
+		/// </summary>
 		public List<DateTime> GetLogTimes(string dB,DateTime date)
 		{
 			List<DateTime> times;
@@ -106,8 +117,15 @@ namespace SQLRestoreScripter
 		public DateTime LatestDate(string dB)
 		{
 			DateTime restorePoint;
-			restorePoint = _fullBKFolder.Files.Where(x => x.DatabaseName ==dB).Select(x => x.LastModified.Date).Max();
+			restorePoint = _fullBKFolder.Files.Where(x => x.DatabaseName == dB).Select(x => x.LastModified.Date).Max();
 			return restorePoint;
+		}
+
+		public BackupFile GetFullBackupFile(string dB,DateTime date)
+		{
+			BackupFile file = null;
+			file = _fullBKFolder.Files.Where(x => x.DatabaseName == dB).Where(x => x.LastModified == date).Single();
+			return file;
 		}
     }
 }
