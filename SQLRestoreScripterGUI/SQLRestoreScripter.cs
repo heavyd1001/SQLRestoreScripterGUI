@@ -58,7 +58,7 @@ namespace SQLRestoreScripterGUI
 			else
 			{
 				maintPlan.FullBKPath = txtSender.Text;
-				PopulateTreeview(maintPlan);
+				//PopulateTreeview(maintPlan);
 			}
 
 		}
@@ -76,7 +76,7 @@ namespace SQLRestoreScripterGUI
 			else
 			{
 				maintPlan.LogBKPath = txtSender.Text;
-				PopulateTreeview(maintPlan);
+				//PopulateTreeview(maintPlan);
 			}
 
 		}
@@ -209,11 +209,15 @@ namespace SQLRestoreScripterGUI
 					foreach (DateTime date in maintPlan.GetDates(dB))
 					{
 						treeView1.Nodes[db].Nodes.Add(date.ToString("d"));
+						treeView1.Nodes[db].LastNode.Tag = maintPlan.GetFullBackupFile(dB, date);
+
+
 						if (maintPlan.LogBKFolder != null)
 						{
 							foreach (DateTime time in maintPlan.GetLogTimes(dB,date))
 							{
 								treeView1.Nodes[db].Nodes[dateindex].Nodes.Add(time.ToString("hh:mm tt"));
+								treeView1.Nodes[db].Nodes[dateindex].LastNode.Tag = maintPlan.GetLogBackupFile(dB, time);
 							}
 							dateindex++;
 						}
@@ -226,7 +230,7 @@ namespace SQLRestoreScripterGUI
 
 		private void btnGenerate_Click(object sender, EventArgs e)
 		{
-			List<DateTime> files = new List<DateTime>();
+			List<BackupFile> files = null;
 			foreach (TreeNode node in treeView1.Nodes)
 			{
 				if (node.Checked == false)
@@ -237,21 +241,28 @@ namespace SQLRestoreScripterGUI
 					if (subNode.Checked == false)
 						continue;
 
-					files.Add(DateTime.ParseExact(subNode.Text, "d", null));
+					files.Add((BackupFile)subNode.Tag);
 
 					foreach (TreeNode subSubNode in subNode.Nodes)
 					{
 						if (subSubNode.Checked == true)
 							continue;
-						MessageBox.Show(subSubNode.ToString());
+						
+						files.Add((BackupFile)subNode.Tag);
+
 					}
 				}
 				
 			}
-			foreach (DateTime file in files)
+			foreach (BackupFile file in files)
 			{
 				MessageBox.Show(file.ToString());
 			}
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			PopulateTreeview(maintPlan);
 		}
 
 

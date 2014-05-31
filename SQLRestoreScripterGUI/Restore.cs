@@ -45,7 +45,7 @@ namespace SQLRestoreScripterGUI
 			RestorePoints = new List<RestorePoint>();
 			foreach (BackupFile dB in dBs)
 			{
-				RestorePoints.Add(new RestorePoint(dB));
+				//RestorePoints.Add(new RestorePoint(dB));
 			}
 		}
 

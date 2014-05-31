@@ -93,7 +93,7 @@ namespace SQLRestoreScripter
 		public List<DateTime> GetDates(string dB)
 		{
 			List<DateTime> dates;
-			dates = FullBKFolder.Files.Where(x => x.DatabaseName == dB).Select(x => x.LastModified.Date).Distinct().ToList();
+			dates = _fullBKFolder.Files.Where(x => x.DatabaseName == dB).Select(x => x.LastModified.Date).Distinct().ToList();
 			return dates;
 		}
 
@@ -103,7 +103,7 @@ namespace SQLRestoreScripter
 		public List<DateTime> GetLogTimes(string dB,DateTime date)
 		{
 			List<DateTime> times;
-			times = LogBKFolder.Files.Where(x => x.DatabaseName == dB).Where(x=>x.LastModified.Date == date).Select(x => x.LastModified).Distinct().ToList();
+			times = _logBKFolder.Files.Where(x => x.DatabaseName == dB).Where(x=>x.LastModified.Date == date).Select(x => x.LastModified).Distinct().ToList();
 			return times;
 		}
 
@@ -121,10 +121,17 @@ namespace SQLRestoreScripter
 			return restorePoint;
 		}
 
-		public BackupFile GetFullBackupFile(string dB,DateTime date)
+		public BackupFile GetFullBackupFile(string dB, DateTime date)
 		{
 			BackupFile file = null;
-			file = _fullBKFolder.Files.Where(x => x.DatabaseName == dB).Where(x => x.LastModified == date).Single();
+			file = _fullBKFolder.Files.Where(x => x.DatabaseName == dB).Last();
+			return file;
+		}
+
+		public BackupFile GetLogBackupFile(string dB, DateTime date)
+		{
+			BackupFile file = null;
+			file = _logBKFolder.Files.Where(x => x.DatabaseName == dB).Last();
 			return file;
 		}
     }
