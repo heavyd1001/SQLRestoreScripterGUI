@@ -230,7 +230,7 @@ namespace SQLRestoreScripterGUI
 
 		private void btnGenerate_Click(object sender, EventArgs e)
 		{
-			List<BackupFile> files = null;
+			List<BackupFile> files = new List<BackupFile>();
 			foreach (TreeNode node in treeView1.Nodes)
 			{
 				if (node.Checked == false)
@@ -248,7 +248,7 @@ namespace SQLRestoreScripterGUI
 						if (subSubNode.Checked == true)
 							continue;
 						
-						files.Add((BackupFile)subNode.Tag);
+						files.Add((BackupFile)subSubNode.Tag);
 
 					}
 				}

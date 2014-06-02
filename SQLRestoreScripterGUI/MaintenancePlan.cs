@@ -124,14 +124,14 @@ namespace SQLRestoreScripter
 		public BackupFile GetFullBackupFile(string dB, DateTime date)
 		{
 			BackupFile file = null;
-			file = _fullBKFolder.Files.Where(x => x.DatabaseName == dB).Last();
+			file = _fullBKFolder.Files.Where(x => x.DatabaseName == dB).Where(x => x.LastModified.ToString("d") == date.ToString("d")).Single();
 			return file;
 		}
 
 		public BackupFile GetLogBackupFile(string dB, DateTime date)
 		{
 			BackupFile file = null;
-			file = _logBKFolder.Files.Where(x => x.DatabaseName == dB).Last();
+			file = _logBKFolder.Files.Where(x => x.DatabaseName == dB).Where(x => x.LastModified == date).Single();
 			return file;
 		}
     }
