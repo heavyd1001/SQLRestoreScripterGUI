@@ -254,10 +254,16 @@ namespace SQLRestoreScripterGUI
 				}
 				
 			}
+
+			StringBuilder strScript = new StringBuilder();
+			
 			foreach (BackupFile file in files)
 			{
-				MessageBox.Show(file.ToString());
+				strScript.AppendLine(file.ToString());
 			}
+
+			textBox4.Text = strScript.ToString();
+
 		}
 
 		private void button1_Click(object sender, EventArgs e)

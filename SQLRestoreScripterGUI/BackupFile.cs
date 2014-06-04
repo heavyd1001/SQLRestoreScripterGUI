@@ -33,7 +33,13 @@ namespace SQLRestoreScripter
 
 		public override string ToString()
 		{
-			return string.Format("this is a full Backup File{0}",this.DatabaseName) ;
+			StringBuilder strFull = new StringBuilder();
+			strFull.AppendLine(string.Format("RESTORE DATABASE \'{0}\'", this.DatabaseName));
+			strFull.AppendLine(string.Format("	FROM DISK = \'{0}{1}\'", this.Path,this.Name));
+			strFull.AppendLine("	WITH FILE = 0");
+			strFull.AppendLine("		NORECOVERY;");
+
+			return strFull.ToString();
 		}
 	}
 	public class DiffBackupFile : BackupFile
@@ -51,7 +57,13 @@ namespace SQLRestoreScripter
 
 		public override string ToString()
 		{
-			return "this is a Log Backup File";
+			StringBuilder strFull = new StringBuilder();
+			strFull.AppendLine(string.Format("RESTORE LOG \'{0}\'", this.DatabaseName));
+			strFull.AppendLine(string.Format("	FROM DISK = \'{0}{1}\'", this.Path, this.Name));
+			strFull.AppendLine("	WITH FILE = 0");
+			strFull.AppendLine("		NORECOVERY;");
+
+			return strFull.ToString();
 		}
 	}
 }

@@ -34,6 +34,7 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.textBox4 = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.button1 = new System.Windows.Forms.Button();
 			this.chkMovingLogs = new System.Windows.Forms.CheckBox();
 			this.btnMovingLogs = new System.Windows.Forms.Button();
 			this.btnMovingDBs = new System.Windows.Forms.Button();
@@ -52,7 +53,6 @@
 			this.txtFullBackupPath = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.treeView1 = new System.Windows.Forms.TreeView();
-			this.button1 = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -96,6 +96,7 @@
 			this.textBox4.Multiline = true;
 			this.textBox4.Name = "textBox4";
 			this.tableLayoutPanel1.SetRowSpan(this.textBox4, 2);
+			this.textBox4.ScrollBars = System.Windows.Forms.ScrollBars.Both;
 			this.textBox4.Size = new System.Drawing.Size(378, 395);
 			this.textBox4.TabIndex = 2;
 			// 
@@ -125,6 +126,16 @@
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Backup Paths";
+			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(328, 20);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(60, 49);
+			this.button1.TabIndex = 18;
+			this.button1.Text = "Select DBs";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// chkMovingLogs
 			// 
@@ -303,16 +314,6 @@
 			this.treeView1.Size = new System.Drawing.Size(394, 240);
 			this.treeView1.TabIndex = 1;
 			this.treeView1.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterCheck);
-			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(328, 20);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(60, 49);
-			this.button1.TabIndex = 18;
-			this.button1.Text = "Select DBs";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// SQLRestoreScripter
 			// 
