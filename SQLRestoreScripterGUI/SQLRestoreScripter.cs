@@ -243,14 +243,30 @@ namespace SQLRestoreScripterGUI
 
 					files.Add((BackupFile)subNode.Tag);
 
+					if (subNode.Nodes.Count == 0)
+						continue;
+					
+					bool childIsChecked = false;
+
 					foreach (TreeNode subSubNode in subNode.Nodes)
 					{
 						if (subSubNode.Checked == true)
-							continue;
-						
-						files.Add((BackupFile)subSubNode.Tag);
-
+							childIsChecked = true;
 					}
+
+					if (childIsChecked == false)
+					{
+
+						continue;
+					}
+
+					foreach (TreeNode subSubNode in subNode.Nodes)
+					{
+						files.Add((BackupFile)subSubNode.Tag);
+						if (subSubNode.Checked == true)
+							break;
+					}
+					
 				}
 				
 			}
