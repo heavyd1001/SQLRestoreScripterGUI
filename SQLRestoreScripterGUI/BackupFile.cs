@@ -34,9 +34,9 @@ namespace SQLRestoreScripter
 		public override string ToString()
 		{
 			StringBuilder strFull = new StringBuilder();
-			strFull.AppendLine(string.Format("RESTORE DATABASE \'{0}\'", this.DatabaseName));
-			strFull.AppendLine(string.Format("	FROM DISK = \'{0}{1}\'", this.Path,this.Name));
-			strFull.AppendLine("	WITH FILE = 0");
+			strFull.AppendLine(string.Format("RESTORE DATABASE \"{0}\"", this.DatabaseName));
+			strFull.AppendLine(string.Format("	FROM DISK = \'{0}\\{1}\'", this.Path,this.Name));
+			strFull.AppendLine("	WITH FILE = 1,");
 			strFull.AppendLine("		NORECOVERY;");
 
 			return strFull.ToString();
@@ -58,9 +58,9 @@ namespace SQLRestoreScripter
 		public override string ToString()
 		{
 			StringBuilder strFull = new StringBuilder();
-			strFull.AppendLine(string.Format("RESTORE LOG \'{0}\'", this.DatabaseName));
-			strFull.AppendLine(string.Format("	FROM DISK = \'{0}{1}\'", this.Path, this.Name));
-			strFull.AppendLine("	WITH FILE = 0");
+			strFull.AppendLine(string.Format("RESTORE LOG \"{0}\"", this.DatabaseName));
+			strFull.AppendLine(string.Format("	FROM DISK = \'{0}\\{1}\'", this.Path, this.Name));
+			strFull.AppendLine("	WITH FILE = 1,");
 			strFull.AppendLine("		NORECOVERY;");
 
 			return strFull.ToString();
