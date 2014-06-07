@@ -16,6 +16,7 @@ namespace SQLRestoreScripter
 		public long Size { get; set; }
         public string DatabaseName { get; set; }
 		public string FileExtension { get; set; }
+		public bool IsTargetRestorepoint { get; set; }
 		
 		public BackupFile(FileInfo file)
         {
@@ -37,7 +38,10 @@ namespace SQLRestoreScripter
 			strFull.AppendLine(string.Format("RESTORE DATABASE \"{0}\"", this.DatabaseName));
 			strFull.AppendLine(string.Format("	FROM DISK = \'{0}\\{1}\'", this.Path,this.Name));
 			strFull.AppendLine("	WITH FILE = 1,");
-			strFull.AppendLine("		NORECOVERY;");
+			if (IsTargetRestorepoint == true)
+				strFull.AppendLine("		RECOVERY;");
+			else
+				strFull.AppendLine("		NORECOVERY;");
 
 			return strFull.ToString();
 		}
@@ -61,7 +65,10 @@ namespace SQLRestoreScripter
 			strFull.AppendLine(string.Format("RESTORE LOG \"{0}\"", this.DatabaseName));
 			strFull.AppendLine(string.Format("	FROM DISK = \'{0}\\{1}\'", this.Path, this.Name));
 			strFull.AppendLine("	WITH FILE = 1,");
-			strFull.AppendLine("		NORECOVERY;");
+			if (IsTargetRestorepoint == true)
+				strFull.AppendLine("		RECOVERY;");
+			else
+				strFull.AppendLine("		NORECOVERY;");
 
 			return strFull.ToString();
 		}

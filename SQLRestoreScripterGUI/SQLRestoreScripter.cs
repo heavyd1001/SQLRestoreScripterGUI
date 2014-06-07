@@ -230,6 +230,8 @@ namespace SQLRestoreScripterGUI
 
 		private void btnGenerate_Click(object sender, EventArgs e)
 		{
+
+
 			List<BackupFile> files = new List<BackupFile>();
 			foreach (TreeNode node in treeView1.Nodes)
 			{
@@ -256,7 +258,7 @@ namespace SQLRestoreScripterGUI
 
 					if (childIsChecked == false)
 					{
-
+						files.Last().IsTargetRestorepoint = true;
 						continue;
 					}
 
@@ -264,7 +266,10 @@ namespace SQLRestoreScripterGUI
 					{
 						files.Add((BackupFile)subSubNode.Tag);
 						if (subSubNode.Checked == true)
+						{
+							files.Last().IsTargetRestorepoint = true;
 							break;
+						}
 					}
 					
 				}
