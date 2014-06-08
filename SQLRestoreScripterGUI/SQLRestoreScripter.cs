@@ -58,7 +58,7 @@ namespace SQLRestoreScripterGUI
 			else
 			{
 				maintPlan.FullBKPath = txtSender.Text;
-				PopulateTreeview(maintPlan);
+				//PopulateTreeview(maintPlan);
 			}
 
 		}
@@ -76,7 +76,7 @@ namespace SQLRestoreScripterGUI
 			else
 			{
 				maintPlan.LogBKPath = txtSender.Text;
-				PopulateTreeview(maintPlan);
+				//PopulateTreeview(maintPlan);
 			}
 
 		}
@@ -197,7 +197,6 @@ namespace SQLRestoreScripterGUI
 			treeNode.Nodes[treeNode.Nodes.Count - 1].Nodes[treeNode.Nodes[treeNode.Nodes.Count - 1].Nodes.Count - 1].Checked = isChecked;
 		}
 
-
 		public void PopulateTreeview(MaintenancePlan maintPlan)
 		{
 			int db = 0;
@@ -210,11 +209,15 @@ namespace SQLRestoreScripterGUI
 					foreach (DateTime date in maintPlan.GetDates(dB))
 					{
 						treeView1.Nodes[db].Nodes.Add(date.ToString("d"));
+						treeView1.Nodes[db].LastNode.Tag = maintPlan.GetFullBackupFile(dB, date);
+
+
 						if (maintPlan.LogBKFolder != null)
 						{
 							foreach (DateTime time in maintPlan.GetLogTimes(dB,date))
 							{
 								treeView1.Nodes[db].Nodes[dateindex].Nodes.Add(time.ToString("hh:mm tt"));
+								treeView1.Nodes[db].Nodes[dateindex].LastNode.Tag = maintPlan.GetLogBackupFile(dB, time);
 							}
 							dateindex++;
 						}
@@ -223,6 +226,119 @@ namespace SQLRestoreScripterGUI
 					dateindex = 0;
 					db++;
 				}
+		}
+
+		public List<BackupFile> BuildFileList()
+		{
+			List<BackupFile> files = new List<BackupFile>();
+			foreach (TreeNode node in treeView1.Nodes)
+			{
+				if (node.Checked == false)
+					continue;
+
+				foreach (TreeNode subNode in node.Nodes)
+				{
+					if (subNode.Checked == false)
+						continue;
+
+					files.Add((BackupFile)subNode.Tag);
+
+					if (chkMovingDBs.Checked == true)
+					{
+						FullBackupFile fullFile = (FullBackupFile)files.Last();
+						fullFile.DBIsMoving = true;
+						fullFile.DBTarget = new DirectoryInfo(txtMovingDBPath.Text);
+					}
+					if (chkMovingLogs.Checked == true)
+					{
+						FullBackupFile fullFile = (FullBackupFile)files.Last();
+						fullFile.LogIsMoving = true;
+						fullFile.LogTarget = new DirectoryInfo(txtMovingDBPath.Text);
+					}
+
+					if (subNode.Nodes.Count == 0)
+						continue;
+
+					bool childIsChecked = false;
+
+					foreach (TreeNode subSubNode in subNode.Nodes)
+					{
+						if (subSubNode.Checked == true)
+							childIsChecked = true;
+					}
+
+					if (childIsChecked == false)
+					{
+						files.Last().IsTargetRestorepoint = true;
+						continue;
+					}
+
+					foreach (TreeNode subSubNode in subNode.Nodes)
+					{
+						files.Add((BackupFile)subSubNode.Tag);
+						if (subSubNode.Checked == true)
+						{
+							files.Last().IsTargetRestorepoint = true;
+							break;
+						}
+					}
+				}
+			}
+			return files;
+		}
+
+		private void btnGenerate_Click(object sender, EventArgs e)
+		{
+
+			bool error = new bool();
+			Restore restore = new Restore(BuildFileList());
+
+			if (chkMovingDBs.Checked == true)
+			{
+				if(Directory.Exists(txtMovingDBPath.Text))
+				{
+					txtMovingDBPath.BackColor = Color.White;
+					restore.TargetDBFolder = txtMovingDBPath.Text;
+				}
+				else
+				{
+
+					txtMovingDBPath.BackColor = Color.Pink;
+					error = true;
+				}
+			}
+
+			if (chkMovingLogs.Checked == true)
+			{
+				if (Directory.Exists(txtMovingLogPath.Text))
+				{
+					txtMovingLogPath.BackColor = Color.White;
+					restore.TargetLogFolder = txtMovingLogPath.Text;
+				}
+				else
+				{
+					txtMovingLogPath.BackColor = Color.Pink;
+					error = true;
+				}
+			}
+
+			if (error == true)
+				return;
+
+			StringBuilder strScript = new StringBuilder();
+			
+			foreach (BackupFile file in restore.RestorePoints)
+			{
+				strScript.AppendLine(file.ToString());
+			}
+
+			textBox4.Text = strScript.ToString();
+
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			PopulateTreeview(maintPlan);
 		}
 
 

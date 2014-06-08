@@ -171,4 +171,8 @@ UpgradeLog*.htm
 *.bim_*.settings
 
 # Microsoft Fakes
+<<<<<<< HEAD
 FakesAssemblies/
+=======
+FakesAssemblies/
+>>>>>>> feature-BuildRequiredFiles

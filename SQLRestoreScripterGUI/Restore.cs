@@ -7,12 +7,12 @@ using SQLRestoreScripter;
 using System.IO;
 namespace SQLRestoreScripterGUI
 {
-	class Restore
+	public class Restore
 	{
 		string _targetDBFolder;
 		string _targetLogFolder;
 
-		public List<RestorePoint> RestorePoints { get; set; }
+		public List<BackupFile> RestorePoints { get; set; }
 		public bool IsMoving { get; set; }
 		public string TargetDBFolder
 		{
@@ -40,13 +40,9 @@ namespace SQLRestoreScripterGUI
 		
 		public Restore()
 			: this(new List<BackupFile>()) {}
-		public Restore(List<BackupFile> dBs)
+		public Restore(List<BackupFile> files)
 		{
-			RestorePoints = new List<RestorePoint>();
-			foreach (BackupFile dB in dBs)
-			{
-				//RestorePoints.Add(new RestorePoint(dB));
-			}
+			RestorePoints = files;
 		}
 
 		public List<string> BackupChain(string dB, DateTime restorePoint)

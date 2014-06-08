@@ -34,6 +34,7 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.textBox4 = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.button1 = new System.Windows.Forms.Button();
 			this.chkMovingLogs = new System.Windows.Forms.CheckBox();
 			this.btnMovingLogs = new System.Windows.Forms.Button();
 			this.btnMovingDBs = new System.Windows.Forms.Button();
@@ -95,11 +96,13 @@
 			this.textBox4.Multiline = true;
 			this.textBox4.Name = "textBox4";
 			this.tableLayoutPanel1.SetRowSpan(this.textBox4, 2);
+			this.textBox4.ScrollBars = System.Windows.Forms.ScrollBars.Both;
 			this.textBox4.Size = new System.Drawing.Size(378, 395);
 			this.textBox4.TabIndex = 2;
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.button1);
 			this.groupBox1.Controls.Add(this.chkMovingLogs);
 			this.groupBox1.Controls.Add(this.btnMovingLogs);
 			this.groupBox1.Controls.Add(this.btnMovingDBs);
@@ -123,6 +126,16 @@
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Backup Paths";
+			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(328, 20);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(60, 49);
+			this.button1.TabIndex = 18;
+			this.button1.Text = "Select DBs";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// chkMovingLogs
 			// 
@@ -188,12 +201,13 @@
 			// 
 			// btnGenerate
 			// 
-			this.btnGenerate.Location = new System.Drawing.Point(327, 18);
+			this.btnGenerate.Location = new System.Drawing.Point(327, 75);
 			this.btnGenerate.Name = "btnGenerate";
-			this.btnGenerate.Size = new System.Drawing.Size(61, 126);
+			this.btnGenerate.Size = new System.Drawing.Size(61, 69);
 			this.btnGenerate.TabIndex = 9;
 			this.btnGenerate.Text = "Generate Script";
 			this.btnGenerate.UseVisualStyleBackColor = true;
+			this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
 			// 
 			// btnLog
 			// 
@@ -350,6 +364,7 @@
 		private System.Windows.Forms.TextBox txtDiffBackupPath;
 		private System.Windows.Forms.TextBox txtFullBackupPath;
 		private System.Windows.Forms.TreeView treeView1;
+		private System.Windows.Forms.Button button1;
 	}
 }
 
