@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
+using SQLRestoreScripterGUI;
+
 
 namespace SQLRestoreScripter
 {
@@ -30,19 +32,33 @@ namespace SQLRestoreScripter
     }
 	public class FullBackupFile : BackupFile
 	{
+		public bool DBIsMoving { get; set; }
+		public bool LogIsMoving { get; set; }
+ 		public DirectoryInfo DBTarget { get; set; }
+		public DirectoryInfo LogTarget { get; set; }
+
 		public FullBackupFile(FileInfo file) : base(file) { }
 
 		public override string ToString()
 		{
 			StringBuilder strFull = new StringBuilder();
-			strFull.AppendLine(string.Format("RESTORE DATABASE \"{0}\"", this.DatabaseName));
-			strFull.AppendLine(string.Format("	FROM DISK = \'{0}\\{1}\'", this.Path,this.Name));
-			strFull.AppendLine("	WITH FILE = 1,");
+			strFull.AppendFormat("RESTORE DATABASE \"{0}\"\r\n", this.DatabaseName);
+			strFull.AppendFormat("	FROM DISK = \'{0}\\{1}\'\r\n", this.Path, this.Name);
+			strFull.AppendFormat("	WITH FILE = 1");
+			
 			if (IsTargetRestorepoint == true)
-				strFull.AppendLine("		RECOVERY;");
+				strFull.AppendFormat(", RECOVERY");
 			else
-				strFull.AppendLine("		NORECOVERY;");
+				strFull.AppendFormat(", NORECOVERY");
 
+			if (DBIsMoving == true)
+				strFull.AppendFormat(", MOVE \'{0}\' TO \'{1}\\{2}.mdf\'", DatabaseName, DBTarget.ToString(), DatabaseName);
+
+			if (LogIsMoving == true)
+				strFull.AppendFormat(", MOVE \'{0}_log\' TO \'{1}\\{2}.LDF\'", DatabaseName, DBTarget.ToString(), DatabaseName);
+
+
+			strFull.AppendLine(";");
 			return strFull.ToString();
 		}
 	}
@@ -61,16 +77,16 @@ namespace SQLRestoreScripter
 
 		public override string ToString()
 		{
-			StringBuilder strFull = new StringBuilder();
-			strFull.AppendLine(string.Format("RESTORE LOG \"{0}\"", this.DatabaseName));
-			strFull.AppendLine(string.Format("	FROM DISK = \'{0}\\{1}\'", this.Path, this.Name));
-			strFull.AppendLine("	WITH FILE = 1,");
+			StringBuilder strLog = new StringBuilder();
+			strLog.AppendLine(string.Format("RESTORE LOG \"{0}\"", this.DatabaseName));
+			strLog.AppendLine(string.Format("	FROM DISK = \'{0}\\{1}\'", this.Path, this.Name));
+			strLog.AppendLine("	WITH FILE = 1,");
 			if (IsTargetRestorepoint == true)
-				strFull.AppendLine("		RECOVERY;");
+				strLog.AppendLine("		RECOVERY;");
 			else
-				strFull.AppendLine("		NORECOVERY;");
+				strLog.AppendLine("		NORECOVERY;");
 
-			return strFull.ToString();
+			return strLog.ToString();
 		}
 	}
 }

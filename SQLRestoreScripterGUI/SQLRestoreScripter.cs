@@ -228,10 +228,8 @@ namespace SQLRestoreScripterGUI
 				}
 		}
 
-		private void btnGenerate_Click(object sender, EventArgs e)
+		public List<BackupFile> BuildFileList()
 		{
-
-
 			List<BackupFile> files = new List<BackupFile>();
 			foreach (TreeNode node in treeView1.Nodes)
 			{
@@ -245,9 +243,22 @@ namespace SQLRestoreScripterGUI
 
 					files.Add((BackupFile)subNode.Tag);
 
+					if (chkMovingDBs.Checked == true)
+					{
+						FullBackupFile fullFile = (FullBackupFile)files.Last();
+						fullFile.DBIsMoving = true;
+						fullFile.DBTarget = new DirectoryInfo(txtMovingDBPath.Text);
+					}
+					if (chkMovingLogs.Checked == true)
+					{
+						FullBackupFile fullFile = (FullBackupFile)files.Last();
+						fullFile.LogIsMoving = true;
+						fullFile.LogTarget = new DirectoryInfo(txtMovingDBPath.Text);
+					}
+
 					if (subNode.Nodes.Count == 0)
 						continue;
-					
+
 					bool childIsChecked = false;
 
 					foreach (TreeNode subSubNode in subNode.Nodes)
@@ -271,14 +282,52 @@ namespace SQLRestoreScripterGUI
 							break;
 						}
 					}
-					
 				}
-				
 			}
+			return files;
+		}
+
+		private void btnGenerate_Click(object sender, EventArgs e)
+		{
+
+			bool error = new bool();
+			Restore restore = new Restore(BuildFileList());
+
+			if (chkMovingDBs.Checked == true)
+			{
+				if(Directory.Exists(txtMovingDBPath.Text))
+				{
+					txtMovingDBPath.BackColor = Color.White;
+					restore.TargetDBFolder = txtMovingDBPath.Text;
+				}
+				else
+				{
+
+					txtMovingDBPath.BackColor = Color.Pink;
+					error = true;
+				}
+			}
+
+			if (chkMovingLogs.Checked == true)
+			{
+				if (Directory.Exists(txtMovingLogPath.Text))
+				{
+					txtMovingLogPath.BackColor = Color.White;
+					restore.TargetLogFolder = txtMovingLogPath.Text;
+				}
+				else
+				{
+					txtMovingLogPath.BackColor = Color.Pink;
+					error = true;
+				}
+			}
+
+			if (error == true)
+				return;
 
 			StringBuilder strScript = new StringBuilder();
 			
-			foreach (BackupFile file in files)
+			foreach (BackupFile file in restore.RestorePoints)
 			{
 				strScript.AppendLine(file.ToString());
 			}
